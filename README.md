@@ -1,80 +1,82 @@
-# Video Game Sales Prediction Project
+#  Predicting Video Game Sales Hits
 
-## Overview
+This project uses machine learning to predict whether a video game will be a **sales hit (over 1 million copies sold)** based on early features such as platform, genre, publisher, and rating — without relying on user or critic scores.
 
-This project explores whether it's possible to predict the commercial success of a video game based on its genre, platform, release year, and publisher. Using machine learning, we aim to answer two key questions:
+---
 
-1. **Classification**: Will the game sell more than 1 million units globally?  
-2. **Regression**: How many millions of units will the game sell globally?
+##  Project Overview
 
-Additionally, we explore which features (e.g., genre, score, platform) are most predictive of strong regional sales in North America (NA), Europe (EU), and Japan (JP).
+- **Goal:** Predict if a video game will be a commercial hit using classification.
+- **Why it matters:** Helps game publishers make early decisions about marketing, budgeting, and platform targeting.
+- **Approach:** Framed as a binary classification problem ("Hit" vs. "Not Hit").
 
-## Business Problem
+---
 
-The global gaming market is highly competitive. Understanding the factors that influence game sales can help publishers make better strategic decisions. This project aims to develop predictive models that classify whether a game will be a sales hit, as well as estimate expected global sales volume.
+##  Business Problem
 
-## Dataset
+> *Can we predict whether a video game will be a sales hit based only on features available before launch — like genre, platform, publisher, and rating?*
 
-The dataset used in this project includes:
-- Game title, platform, and release year
-- Publisher and genre
-- Global and regional sales (NA, EU, JP)
-- Critic and user scores
+---
 
-The cleaned dataset used for modeling is available in this repository: `video_game_sales_final_cleaned.csv`.
+##  Dataset
 
-## Objectives
+- Source: Merged from two Kaggle datasets
+- Size: ~59,000 records
+- Key columns:
+  - `Platform`, `Genre`, `Publisher`, `Rating`
+  - `Global_Sales`, `NA_Sales`, `EU_Sales`, etc.
+  - `Year_of_Release`, `Critic_Score`, `User_Score` (not used due to missing values)
 
-- Predict whether a game will be a global hit (1M+ copies sold) using classification models
-- Predict exact global sales in millions using regression models
-- Identify the most important features influencing sales in global and regional markets
+---
 
-## Features Used
+##  Data Cleaning
 
-- Genre
-- Platform
-- Publisher
-- Release Year
-- Critic Score
-- User Score
+- Removed duplicates and games with missing critical fields
+- Grouped rare genres and publishers under "Other"
+- Converted `Year_of_Release` to integer
+- Dropped `Critic_Score`, `User_Score` due to too many nulls
 
-## Project Structure
+---
 
-- `eda/` - Exploratory data analysis and visualizations
-- `models/` - Machine learning models for classification and regression
-- `notebooks/` - Jupyter notebooks for development and experimentation
-- `video_game_sales_final_cleaned.csv` - Cleaned dataset used in this project
-- `README.md` - Project overview and guide
+##  Feature Engineering
 
-## Methodology
+- Created binary target: `is_hit` (1 if global sales > 1M, else 0)
+- One-hot encoded categorical features
+- Dropped non-predictive fields like game name and developer
 
-1. Data Cleaning and Preprocessing
-   - Missing value handling
-   - One-hot encoding for categorical features
-   - Feature selection
+---
 
-2. Modeling
-   - **Classification**: Random Forest, Logistic Regression, XGBoost
-   - **Regression**: Random Forest Regressor, XGBoost Regressor
+##  Modeling
 
-3. Model Evaluation
-   - Accuracy, precision, recall for classification
-   - RMSE, MAE for regression
-   - Cross-validation and GridSearchCV for hyperparameter tuning
+- Models used:
+  - Logistic Regression (baseline)
+  - Random Forest Classifier ✅ (best performance)
+  - XGBoost
+- Train/test split: 80/20
+- Final evaluation metric: Accuracy and confusion matrix
 
-4. Feature Importance Analysis
-   - Visualizations of top predictive features
-   - Region-specific model insights (NA, EU, JP sales prediction)
+---
 
-## Results
+##  Key Insights
 
-- The classification model achieved high accuracy in identifying global hits.
-- Regression models were effective in approximating total sales volume.
-- Genre, platform, and critic score were consistently among the most predictive features.
+- Most games sell fewer than 1 million copies
+- Platform, genre, and publisher are the top predictors
+- Mature-rated games tend to have higher average sales than child-friendly ones
+- Release year trends (e.g., 2009–2012 drop, post-2019 decline) give valuable context
 
-## How to Run
+---
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/yourusername/video-game-sales-prediction.git
-   cd video-game-sales-prediction
+##  Future Work
+
+- Incorporate user reviews and search trend data
+- Try deep learning on game descriptions
+- Train regression models to estimate exact sales volume
+
+---
+
+##  License
+
+This project is for educational purposes. Data sourced from Kaggle.
+
+---
+
